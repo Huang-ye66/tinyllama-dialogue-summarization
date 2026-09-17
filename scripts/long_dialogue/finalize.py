@@ -4,7 +4,7 @@ import csv,json,os,random
 from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[2]
-RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().resolve()
+RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().absolute()
 REPORT=RUN/"reports/long_dialogue"
 def save(p,o):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2),encoding="utf-8")
 data=json.loads((REPORT/"eval-test.json").read_text(encoding="utf-8"));records=data["records"]

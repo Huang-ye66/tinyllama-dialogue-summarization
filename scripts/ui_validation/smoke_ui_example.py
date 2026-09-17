@@ -29,7 +29,7 @@ BLOCK=[
 ]
 dialogue="\n".join(BLOCK*4)
 root=Path(__file__).resolve().parents[2]
-run_root=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", root)).expanduser().resolve()
+run_root=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", root)).expanduser().absolute()
 checkpoint=run_root/"outputs/models/resource_optimized_r8/final"
 llm=LLM.load(str(checkpoint),distribute=None)
 llm.distribute(accelerator="cuda",precision="bf16-true")

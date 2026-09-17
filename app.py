@@ -7,7 +7,22 @@ import streamlit as st
 from scripts.long_dialogue.hierarchical import summarize_dialogue
 
 REPO_ROOT=Path(__file__).resolve().parent
-RUN_ROOT=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", REPO_ROOT)).expanduser().resolve()
+
+def runtime_root() -> Path:
+ """Return an ASCII-safe project path for Windows model loading when available."""
+ configured=os.environ.get("TINYLLAMA_PROJECT_ROOT")
+ if configured:
+  return Path(configured).expanduser().absolute()
+ if os.name=="nt" and not str(REPO_ROOT).isascii():
+  candidate=Path(REPO_ROOT.anchor)/"ai-model-project"
+  try:
+   if candidate.exists() and candidate.samefile(REPO_ROOT):
+    return candidate
+  except OSError:
+   pass
+ return REPO_ROOT
+
+RUN_ROOT=runtime_root()
 MODELS={
  "R8 · Resource-optimized (recommended)":{"path":RUN_ROOT/"outputs/models/resource_optimized_r8/final","description":"All-module QLoRA rank 8; about 75% smaller than rank 32 with comparable quality across three seeds.","role":"Deployed optimized model"},
  "R32 · Quality baseline":{"path":RUN_ROOT/"outputs/models/quality_baseline_r32/final","description":"All-module QLoRA rank 32 used as the quality and resource baseline.","role":"Reference baseline"},

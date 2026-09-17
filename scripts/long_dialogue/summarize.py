@@ -4,7 +4,7 @@ import argparse,json,os,sys
 from pathlib import Path
 import numpy as np
 ROOT=Path(__file__).resolve().parents[2]
-RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().resolve()
+RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().absolute()
 def save(p,o):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(o,ensure_ascii=False,indent=2),encoding="utf-8")
 def main():
  p=argparse.ArgumentParser();p.add_argument("--split",choices=["val","test"],required=True);a=p.parse_args()

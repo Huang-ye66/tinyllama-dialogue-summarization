@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse,json,os,random,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().resolve()
+RUN=Path(os.environ.get("TINYLLAMA_PROJECT_ROOT", ROOT)).expanduser().absolute()
 sys.path.insert(0,str(RUN))
 from litgpt import LLM
 from scripts.core.reliability import extract_facts
