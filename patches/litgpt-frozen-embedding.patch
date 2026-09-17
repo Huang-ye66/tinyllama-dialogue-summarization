@@ -1,0 +1,31 @@
+diff --git a/litgpt/finetune/lora.py b/litgpt/finetune/lora.py
+index fbecf5a..dc7b00c 100644
+--- a/litgpt/finetune/lora.py
++++ b/litgpt/finetune/lora.py
+@@ -218,18 +218,17 @@ def main(
+     if isinstance(fabric.strategy.precision, BitsandbytesPrecision):
+         optimizer = instantiate_bnb_optimizer(optimizer, model.parameters())
+ 
+-        from bitsandbytes.nn import StableEmbedding
+-
+-        old_embedding = model.transformer.wte
+-        model.transformer.wte = StableEmbedding(old_embedding.num_embeddings, old_embedding.embedding_dim)
+-        with torch.no_grad():
+-            model.transformer.wte.weight.copy_(old_embedding.weight)
+-        model.transformer.wte = model.transformer.wte.to(
+-            device=old_embedding.weight.device, dtype=old_embedding.weight.dtype
+-        )
++        # Preserve frozen pretrained embeddings: replacement adds unsaved LayerNorm
++        # parameters and breaks the adapter-only save/reload contract.
++
+     else:
+         optimizer = instantiate_torch_optimizer(optimizer, model.parameters())
+ 
++    unexpected_trainable = [name for name, param in model.named_parameters()
++                            if param.requires_grad and "lora_" not in name]
++    if unexpected_trainable:
++        raise RuntimeError(f"Non-adapter parameters are trainable: {unexpected_trainable}")
++
+     optimizer = fabric.setup_optimizers(optimizer)
+     scheduler = get_lr_scheduler(optimizer, warmup_steps=train.lr_warmup_steps, max_steps=lr_max_steps)
+ 

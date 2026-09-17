@@ -1,0 +1,7 @@
+torch>=2.4
+litgpt>=0.5
+lightning>=2.4
+bitsandbytes>=0.43
+streamlit>=1.36
+numpy>=1.26,<3
+rouge-score>=0.1.2

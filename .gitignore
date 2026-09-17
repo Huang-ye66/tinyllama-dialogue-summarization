@@ -1,0 +1,35 @@
+.venv/
+.python/
+.tools/
+.cache/
+upstream/
+checkpoints/
+data/
+outputs/
+archive/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.log
+*.pid
+
+# Local runtime state and machine-specific evaluation artifacts
+reports/**/*.pid
+reports/**/*-pid.json
+reports/**/*.json
+reports/**/runtime_logs/
+reports/**/eval-*.json
+reports/**/human_eval_*.json
+reports/**/human_eval_*.csv
+reports/**/ui*.json
+reports/**/status.json
+reports/**/official_summary.json
+
+# Personal documents and common secret files
+*.docx
+*.pdf
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
